@@ -10,6 +10,12 @@ const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 
+// Rota raiz — evita erro "Cannot GET /"
+app.get('/', (req, res) => {
+  res.send('Solana Wallet Generator API is running.');
+});
+
+// Rota de geração da carteira
 app.get('/generate', async (req, res) => {
   try {
     const mnemonic = bip39.generateMnemonic();
@@ -29,6 +35,7 @@ app.get('/generate', async (req, res) => {
   }
 });
 
+// Inicializa o servidor
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
