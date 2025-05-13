@@ -1,4 +1,3 @@
-// server.js (backend Node.js para gerar carteira Solana)
 const express = require('express');
 const cors = require('cors');
 const bip39 = require('bip39');
@@ -10,12 +9,10 @@ const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 
-// Rota raiz — evita erro "Cannot GET /"
 app.get('/', (req, res) => {
   res.send('Solana Wallet Generator API is running.');
 });
 
-// Rota de geração da carteira
 app.get('/generate', async (req, res) => {
   try {
     const mnemonic = bip39.generateMnemonic();
@@ -29,13 +26,13 @@ app.get('/generate', async (req, res) => {
       mnemonic,
       address: keypair.publicKey.toBase58(),
       privateKey: Array.from(keypair.secretKey),
+      privateKeyBase58: Buffer.from(keypair.secretKey).toString('base64'), // string exportável
     });
   } catch (err) {
     res.status(500).json({ error: 'Failed to generate wallet.' });
   }
 });
 
-// Inicializa o servidor
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
